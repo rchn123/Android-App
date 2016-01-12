@@ -1,0 +1,190 @@
+package api.example.mybluetoth;
+
+import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.Set;
+
+import android.R.string;
+import android.os.Bundle;
+import android.os.Message;
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
+
+public class MainActivity extends Activity {
+	Button btn_on,btn_off,btn_dis,btn_search;
+	ListView list;
+	BluetoothAdapter badapter;
+	BroadcastReceiver receiver;
+	ArrayList<string> deviceList;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		deviceList=new ArrayList<string>();
+		receiver=new BroadcastReceiver() {
+				
+	
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				// TODO Auto-generated method stub
+				Message msg=Message.obtain();
+				String action=intent.getAction();
+				if(BluetoothDevice.ACTION_FOUND.equals(action))
+				{
+				Toast.makeText(MainActivity.this, "Action found", Toast.LENGTH_SHORT).show();
+				BluetoothDevice device=intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+			
+				device.getName();
+				device.getAddress();
+				}
+			
+			
+		btn_off=(Button) findViewById(R.id.btn_off);
+		btn_on=(Button) findViewById(R.id.btn_on);
+		btn_dis=(Button) findViewById(R.id.btn_dis);
+		btn_search=(Button) findViewById(R.id.btn_search);
+		list=(ListView) findViewById(R.id.listView1);
+		badapter=BluetoothAdapter.getDefaultAdapter();
+		if(!(badapter==null))
+		{
+			badapter.setName("my device");
+			Toast.makeText(MainActivity.this,"Bluetooth", Toast.LENGTH_SHORT).show();
+			
+			
+		}
+		btn_on.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(badapter.isEnabled())
+				{
+					String deviceName=badapter.getName();
+					String deviceAddress=badapter.getAddress();
+					Toast.makeText(MainActivity.this, deviceName+"-"+deviceAddress,Toast.LENGTH_SHORT ).show();
+					
+				}
+				else{
+					Intent in=new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+					startActivityForResult(in,0);
+				}
+				
+			}
+		});
+		btn_off.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				badapter.disable();
+			}
+		});
+		btn_dis.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(!badapter.isEnabled())
+				{
+					Intent in=new Intent();
+					startActivity(in);
+				}
+				else
+				{
+					Intent in=new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+					in.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,500);
+					startActivity(in);
+				}
+				
+			}
+
+			
+		});
+		btn_search.setOnClickListener(new OnClickListener() {
+			
+			@Override 
+			public void onClick(View v) {
+		Set<BluetoothDevice>bluetoothdevice=badapter.getBondedDevices();
+		
+			}
+			
+		});
+	
+				}
+			};
+	}
+}
+
+xml code
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+    
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button3"
+        android:layout_centerHorizontal="true" >
+
+        <Button
+            android:id="@+id/btn_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="on" 
+            />
+
+        <Button
+            android:id="@+id/btn_dis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/linearLayout1"
+            android:text="dis" 
+            android:layout_weight="2"/>
+
+        <Button
+            android:id="@+id/btn_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="off" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_marginTop="15dp"
+        android:text="search" />
+
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_search" >
+
+    </ListView>
+
+</RelativeLayout>
+ 
