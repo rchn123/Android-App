@@ -1,0 +1,92 @@
+package com.Time_picker_pack;
+
+import java.util.Calendar;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.TimePicker;
+
+public class Time_picker_acti extends Activity {
+    /** Called when the activity is first created. */
+	//TimePicker timePicker;
+	private TextView mTimeDisplay;
+    private Button mPickTime;
+
+    private int mHour;
+    private int mMinute;
+
+    static final int TIME_DIALOG_ID = 0;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+
+        // capture our View elements
+        mTimeDisplay = (TextView) findViewById(R.id.timeDisplay);
+        mPickTime = (Button) findViewById(R.id.pickTime);
+
+        // add a click listener to the button
+        mPickTime.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showDialog(TIME_DIALOG_ID);
+            }
+        });
+
+        // get the current time
+        final Calendar c = Calendar.getInstance();
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
+
+        // display the current date
+        updateDisplay();
+    }
+        
+        
+        
+    private void updateDisplay() {
+        mTimeDisplay.setText(
+            new StringBuilder()
+                    .append(mHour).append(":")
+                    .append(mMinute));
+    }
+
+    
+    private TimePickerDialog.OnTimeSetListener mTimeSetListener =
+        new TimePickerDialog.OnTimeSetListener() {
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                mHour = hourOfDay;
+                mMinute = minute;
+                updateDisplay();
+            }
+        };
+        @Override
+        protected Dialog onCreateDialog(int id) {
+            switch (id) {
+            case TIME_DIALOG_ID:
+                return new TimePickerDialog(this,
+                        mTimeSetListener, mHour, mMinute, false);
+            }
+            return null;
+        }
+}
+    
+xml code
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView android:id="@+id/timeDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""/>
+    <Button android:id="@+id/pickTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change the time"/>
+</LinearLayout>
