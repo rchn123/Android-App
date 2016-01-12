@@ -1,0 +1,89 @@
+package com.slk.mypack;
+
+import android.app.Activity;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+
+public class ContactsContentActivity extends Activity {
+    /** Called when the activity is first created. */
+	TextView tv;
+	Button btn;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        
+        
+        tv=(TextView)findViewById(R.id.textView1);
+        btn=(Button)findViewById(R.id.button1);
+        
+        btn.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				 String[] projection = {
+					      ContactsContract.Contacts._ID,
+					      ContactsContract.Contacts.DISPLAY_NAME
+					     
+					
+					    };
+				 Cursor cursor = 
+					      getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,
+					                                 projection, null, null, null);
+					       
+					    // Get the index of the columns.
+					    int nameIdx = 
+					      cursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME);
+					    int idIdx = 
+					      cursor.getColumnIndexOrThrow(ContactsContract.Contacts._ID);
+					  
+					    // Initialize the result set.
+					    String[] result = new String[cursor.getCount()];
+					  
+					    // Iterate over the result Cursor.
+					    while(cursor.moveToNext()) {
+					      // Extract the name.
+					      String name = cursor.getString(nameIdx);
+					      // Extract the unique ID.
+					      String id = cursor.getString(idIdx);
+					   
+					      result[cursor.getPosition()] = name + " (" + id + ")";
+					      
+				            StringBuilder sb = new StringBuilder();
+				            for (int i = 0; i < result.length; i++)
+				              tv.setText(sb.append(result[i]));
+					      //tv.setText(id+ " "+ name);
+					    } 
+					  
+					    // Close the Cursor.
+					    cursor.close();
+
+			}
+		});
+    }
+}
+xml code
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
+</LinearLayout>
