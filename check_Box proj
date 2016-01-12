@@ -1,0 +1,128 @@
+1-
+package com.checkBox_pack;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.Toast;
+
+
+public class activity1 extends Activity {
+    /** Called when the activity is first created. */
+	
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.first);
+        Toast.makeText(this, "activity1 is called", Toast.LENGTH_LONG).show();
+    }
+}
+2-
+package com.checkBox_pack;
+
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.Toast;
+
+
+public class activity2 extends Activity {
+    /** Called when the activity is first created. */
+	
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.second);
+        Toast.makeText(this, "activity2 is called", Toast.LENGTH_LONG).show();
+    }
+}
+3-
+package com.checkBox_pack;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+
+public class checkBox_act extends Activity {
+    /** Called when the activity is first created. */
+	CheckBox ck1,ck2;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        ck1=(CheckBox)findViewById(R.id.checkBox1);
+        ck2=(CheckBox)findViewById(R.id.checkBox2);
+       
+        
+        ck1.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				
+			}
+		});
+        ck1.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+        
+       /* ck1.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(ck1.isChecked())
+				{
+					Intent i=new Intent(checkBox_act.this,activity1.class);
+					startActivity(i);
+				}
+			}
+		});*/
+        ck2.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(ck2.isChecked())
+				{
+					Intent i=new Intent(checkBox_act.this,activity2.class);
+					startActivity(i);
+				}
+			}
+		});
+    }
+}
+xml code
+first-
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+    <TextView android:text="first" android:id="@+id/First" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+</LinearLayout>
+
+Second-
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+    <TextView android:text="second" android:id="@+id/second" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+</LinearLayout>
+main-<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+
+<CheckBox android:text="call_activityA" android:id="@+id/checkBox1" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
+<CheckBox android:text="call_activityB" android:id="@+id/checkBox2" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
+</LinearLayout>
